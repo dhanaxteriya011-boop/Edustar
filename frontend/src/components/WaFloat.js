@@ -1,0 +1,1 @@
+export { WaFloat as default, WaFloat, Toast } from './Footer';
