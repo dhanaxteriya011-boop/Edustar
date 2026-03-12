@@ -8,8 +8,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Services from './pages/Services';
 import Contact from './pages/Contact';
-import Enquiry from './pages/Enquiry';
-import Login from './pages/Login';
+// Removed: import Enquiry from './pages/Enquiry';
 
 export const ToastContext = React.createContext(null);
 
@@ -26,8 +25,6 @@ function App() {
     setTimeout(() => setToast({ show: false, msg: '' }), 3500);
   };
 
-  const noFooter = ['login'];
-
   return (
     <ToastContext.Provider value={showToast}>
       <Navbar page={page} setPage={setPage} />
@@ -35,9 +32,9 @@ function App() {
       {page === 'about'    && <About    setPage={setPage} />}
       {page === 'services' && <Services setPage={setPage} />}
       {page === 'contact'  && <Contact  setPage={setPage} />}
-      {page === 'enquiry'  && <Enquiry  setPage={setPage} />}
-      {page === 'login'    && <Login    setPage={setPage} />}
-      {!noFooter.includes(page) && <Footer setPage={setPage} />}
+      {/* Removed: Enquiry page conditional */}
+      
+      <Footer setPage={setPage} />
       <WaFloat />
       <Toast show={toast.show} msg={toast.msg} />
     </ToastContext.Provider>

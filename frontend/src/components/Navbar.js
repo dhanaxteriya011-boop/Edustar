@@ -15,7 +15,7 @@ const Navbar = ({ page, setPage }) => {
     { id: 'about', label: 'About' },
     { id: 'services', label: 'Services' },
     { id: 'contact', label: 'Contact' },
-    { id: 'enquiry', label: 'Enquiry' },
+    // Removed: Enquiry link object
   ];
 
   const go = (id) => { setPage(id); setOpen(false); };
@@ -28,11 +28,15 @@ const Navbar = ({ page, setPage }) => {
       </div>
       <div className={`nav-links ${open ? 'open' : ''}`}>
         {links.map(l => (
-          <a key={l.id} className={page === l.id ? 'active' : ''} href="#" onClick={e => { e.preventDefault(); go(l.id); }}>
+          <a 
+            key={l.id} 
+            className={page === l.id ? 'active' : ''} 
+            href="#" 
+            onClick={e => { e.preventDefault(); go(l.id); }}
+          >
             {l.label}
           </a>
         ))}
-        <a className="nav-cta" href="#" onClick={e => { e.preventDefault(); go('login'); }}>Login</a>
       </div>
       <button className="hamburger" onClick={() => setOpen(!open)} aria-label="Menu">
         <span /><span /><span />

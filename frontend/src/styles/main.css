@@ -158,6 +158,140 @@ img{max-width:100%}
   content:'';position:absolute;inset:0;
   background:url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23fff' fill-opacity='.025'%3E%3Ccircle cx='40' cy='40' r='30'/%3E%3Ccircle cx='0' cy='0' r='30'/%3E%3Ccircle cx='80' cy='80' r='30'/%3E%3C/g%3E%3C/svg%3E");
 }
+/* ── SMOOTH TRANSITIONS & REVEALS ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── HERO ENHANCEMENT ── */
+.hero {
+  background: radial-gradient(circle at top right, var(--primary-mid), var(--primary));
+  position: relative;
+}
+
+.hero-shape {
+  position: absolute;
+  top: 10%;
+  left: -5%;
+  width: 300px;
+  height: 300px;
+  background: var(--accent);
+  filter: blur(150px);
+  opacity: 0.15;
+  z-index: 0;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+/* ── CARD HOVER EFFECTS ── */
+.card, .svc-card, .testi {
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* ── GLASSMORPHISM REFINEMENT ── */
+.hero-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* ── BUTTON OVERRIDES ── */
+.btn-primary, .btn-outline, .btn-green {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+}
+
+/* ── LOGO ANIMATION ── */
+.logo:hover .logo-mark {
+  transform: rotate(15deg);
+  transition: 0.3s ease;
+}
+
+/* ── SECTION PADDING ── */
+.section {
+  padding: 100px 5%;
+}
+
+/* ── TABLET/MOBILE TWEAKS ── */
+@media (max-width: 768px) {
+  .hero h1 { font-size: 2.8rem; }
+  .section { padding: 60px 5%; }
+}
+/* Tab Styling */
+.btn-tab {
+  padding: 10px 22px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: 2px solid var(--primary-mid);
+  background: transparent;
+  color: var(--primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-tab.active, .btn-tab:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* Service Card Extras */
+.seats-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: var(--accent);
+  color: var(--dark);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 50px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.svc-desc {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+/* Table Refinement */
+.fee-table td {
+  transition: background 0.2s ease;
+}
+
+.fee-table tr:hover td {
+  background: rgba(10, 74, 58, 0.03);
+}
+
+@media (max-width: 600px) {
+  .btn-tab {
+    width: 100%; /* Full width tabs on mobile */
+  }
+}
 .hero::after{
   content:'';position:absolute;right:-120px;top:-80px;
   width:600px;height:600px;

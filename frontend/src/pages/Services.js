@@ -1,8 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Services = ({ setPage }) => {
-  const go = (id) => { setPage(id); window.scrollTo({ top: 0 }); };
   const [tab, setTab] = useState('all');
+
+  const go = (id) => { 
+    setPage(id); 
+    window.scrollTo({ top: 0, behavior: 'smooth' }); 
+  };
+
+  // Scroll Reveal Animation Logic
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('show');
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   const courses = [
     { grade: '6–8', label: 'Foundation', subjects: ['Mathematics','Science','English','Social Studies'], time: '5:00 PM – 6:00 PM', days: 'Mon–Sat', fee: '₹1,200', admission: '₹500', batch: 'June 2, 2025', seats: '8 seats left', desc: 'Build strong fundamentals in core subjects. Perfect for students entering middle school.', tag: 'foundation' },
@@ -16,58 +32,59 @@ const Services = ({ setPage }) => {
 
   const tabs = [
     { key: 'all', label: 'All Courses' },
-    { key: 'foundation', label: 'Foundation (6–8)' },
-    { key: 'board', label: 'Board Prep (9–10)' },
-    { key: 'advanced', label: 'Advanced (11–12)' },
+    { key: 'foundation', label: 'Grades 6–8' },
+    { key: 'board', label: 'Grades 9–10' },
+    { key: 'advanced', label: 'Grades 11–12' },
     { key: 'special', label: 'Special / Crash' },
   ];
 
-  const tabStyle = (key) => ({
-    padding: '9px 20px', borderRadius: 50, fontWeight: 600, fontSize: '.85rem',
-    border: '2px solid var(--primary-mid)',
-    background: tab === key ? 'var(--primary)' : 'transparent',
-    color: tab === key ? '#fff' : 'var(--primary)',
-    cursor: 'pointer', transition: '.2s', fontFamily: 'Outfit, sans-serif',
-  });
-
   return (
     <>
+      {/* ── PAGE HERO ── */}
       <div className="page-hero">
         <div className="breadcrumb">
           <a href="#" onClick={(e) => { e.preventDefault(); go('home'); }}>Home</a>
           <span>/</span>Services
         </div>
-        <h1>Our Services &amp; Courses</h1>
-        <p>Structured programs for every grade — expert-taught and results-proven</p>
+        <h1 className="fade-up">Our Courses & Fee Structure</h1>
+        <p className="fade-up delay-1">Expert-taught programs designed for academic excellence</p>
       </div>
 
+      {/* ── COURSE TABS ── */}
       <section className="section">
-        <div className="container">
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 40, justifyContent: 'center' }}>
+        <div className="container reveal">
+          <div className="tab-container" style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 40, justifyContent: 'center' }}>
             {tabs.map(t => (
-              <button key={t.key} onClick={() => setTab(t.key)} style={tabStyle(t.key)}>{t.label}</button>
+              <button 
+                key={t.key} 
+                onClick={() => setTab(t.key)}
+                className={`btn-tab ${tab === t.key ? 'active' : ''}`}
+              >
+                {t.label}
+              </button>
             ))}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))', gap: 24 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
             {filtered.map((c, i) => (
-              <div key={i} className="svc-card" style={{ position: 'relative' }}>
+              <div key={i} className="svc-card">
                 <div className="svc-head">
                   <div className="svc-grade">Grade {c.grade}</div>
                   <div className="svc-lbl">{c.label}</div>
-                  <span style={{ position:'absolute', top:14, right:14, background:'rgba(232,160,32,.9)', color:'#061f18', fontSize:'.7rem', fontWeight:700, padding:'3px 10px', borderRadius:50 }}>{c.seats}</span>
+                  <span className="seats-badge">{c.seats}</span>
                 </div>
                 <div className="svc-body">
-                  <p style={{ color: 'var(--text-muted)', fontSize: '.86rem', marginBottom: 14, lineHeight: 1.7 }}>{c.desc}</p>
-                  <div className="svc-tags">{c.subjects.map((s, j) => <span key={j} className="tag">{s}</span>)}</div>
+                  <p className="svc-desc">{c.desc}</p>
+                  <div className="svc-tags">
+                    {c.subjects.map((s, j) => <span key={j} className="tag">{s}</span>)}
+                  </div>
                   <div className="svc-meta">
                     <div className="svc-meta-row"><span>⏰</span><strong>{c.time}</strong></div>
                     <div className="svc-meta-row"><span>📅</span>{c.days}</div>
-                    <div className="svc-meta-row"><span>🚀</span>Batch: {c.batch}</div>
-                    <div className="svc-meta-row"><span>🎫</span>Admission fee: {c.admission}</div>
+                    <div className="svc-meta-row"><span>🎫</span>Admission: {c.admission}</div>
                   </div>
-                  <div className="svc-fee" style={{ marginTop: 12 }}>{c.fee} <span>/ month</span></div>
-                  <button className="btn-enq" onClick={() => go('enquiry')}>📋 Enquire &amp; Enrol</button>
+                  <div className="svc-fee">{c.fee} <span>/ month</span></div>
+                  <button className="btn-enq" onClick={() => go('contact')}>Enrol Now</button>
                 </div>
               </div>
             ))}
@@ -75,33 +92,30 @@ const Services = ({ setPage }) => {
         </div>
       </section>
 
+      {/* ── DETAILED TABLE ── */}
       <section className="section section-alt">
-        <div className="container">
+        <div className="container reveal">
           <div className="sec-head center">
-            <div className="section-badge">Fee Structure</div>
-            <h2 className="section-title">Complete Fee Summary</h2>
+            <div className="section-badge">Fee Summary</div>
+            <h2 className="section-title">Transparent Pricing</h2>
           </div>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', background: '#fff', borderRadius: 14, overflow: 'hidden', boxShadow: 'var(--sh-sm)' }}>
+          <div className="table-responsive" style={{ overflowX: 'auto', borderRadius: '15px', border: '1px solid var(--border)' }}>
+            <table className="fee-table" style={{ width: '100%', borderCollapse: 'collapse', background: '#fff' }}>
               <thead>
                 <tr style={{ background: 'var(--primary)', color: '#fff' }}>
-                  {['Class','Subjects','Timing','Days','Monthly Fee','Admission Fee'].map((h, i) => (
-                    <th key={i} style={{ padding: '14px 18px', textAlign: 'left', fontSize: '.84rem', fontWeight: 600, fontFamily: 'Outfit, sans-serif' }}>{h}</th>
+                  {['Class','Subjects','Timing','Monthly Fee','Admission'].map((h, i) => (
+                    <th key={i} style={{ padding: '16px', textAlign: 'left', fontSize: '.85rem' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['Grade 6–8','Maths, Science, English, Social','5 PM – 6 PM','Mon–Sat','₹1,200','₹500'],
-                  ['Grade 9–10','Maths, Science, English, Social','6 PM – 7:30 PM','Mon–Sat','₹1,500','₹500'],
-                  ['Grade 11–12','Physics, Chemistry, Maths, Bio','7:30 PM – 9 PM','Mon–Sat','₹2,000','₹750'],
-                  ['Special Coaching','All Subjects + Doubt Clearing','9 AM – 12 PM','Sat & Sun','₹2,500','₹500'],
-                  ['Crash Course','Maths, Science, All Subjects','Flexible','2 Weeks','₹800','Nil'],
-                ].map((row, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? '#fff' : 'rgba(245,242,235,.6)' }}>
-                    {row.map((cell, j) => (
-                      <td key={j} style={{ padding: '13px 18px', fontSize: '.86rem', color: j === 0 ? 'var(--primary)' : 'var(--text-muted)', fontWeight: j === 0 ? 600 : 400 }}>{cell}</td>
-                    ))}
+                {courses.map((c, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
+                    <td style={{ padding: '15px', fontWeight: 600, color: 'var(--primary)' }}>Grade {c.grade}</td>
+                    <td style={{ padding: '15px', fontSize: '.85rem', color: 'var(--text-muted)' }}>{c.subjects.join(', ')}</td>
+                    <td style={{ padding: '15px', fontSize: '.85rem' }}>{c.time}</td>
+                    <td style={{ padding: '15px', fontWeight: 700, color: 'var(--primary-mid)' }}>{c.fee}</td>
+                    <td style={{ padding: '15px', fontSize: '.85rem' }}>{c.admission}</td>
                   </tr>
                 ))}
               </tbody>
@@ -110,12 +124,13 @@ const Services = ({ setPage }) => {
         </div>
       </section>
 
-      <div className="cta-banner">
-        <h2>Ready to Enrol Your Child?</h2>
-        <p>Submit an enquiry and we will confirm seat availability within 24 hours.</p>
+      {/* ── CTA ── */}
+      <div className="cta-banner reveal">
+        <h2>Ready to Secure a Seat?</h2>
+        <p>Contact us today to verify availability and complete the admission process.</p>
         <div className="cta-btns">
-          <button className="btn-primary" onClick={() => go('enquiry')}>📋 Submit Enquiry</button>
-          <a className="btn-outline" href="https://wa.me/919876543210?text=Hello%2C%20I%20want%20to%20enquire%20about%20EduStar%20courses" target="_blank" rel="noopener noreferrer">💬 WhatsApp Us</a>
+          <button className="btn-primary" onClick={() => go('contact')}>📩 Contact Admission Office</button>
+          <a className="btn-outline" href="https://wa.me/919876543210">💬 Chat on WhatsApp</a>
         </div>
       </div>
     </>
